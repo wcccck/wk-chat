@@ -1,5 +1,5 @@
 import classes from './Input.module.scss'
-import {defineComponent, PropType, Ref} from "vue";
+import {defineComponent, PropType, ref, Ref} from "vue";
 
 export default defineComponent({
   props:{
@@ -18,12 +18,17 @@ export default defineComponent({
   },
   setup(props,context){
     const {slots} = context
+    const input = ref<HTMLInputElement>()
     return ()=>{
-      return <div>
+      return <div onClick={()=>{
+        if(input.value){
+          input.value?.focus()
+        }
+      } }>
         <div class={classes.main}>
           <div class={classes.left}>
             {slots.left?.()}
-            <input maxlength={props.maxLength} type={props.inputType} v-model={props.Model.value} />
+            <input ref={input} maxlength={props.maxLength} type={props.inputType} v-model={props.Model.value} />
           </div>
           <div class={classes.right}>
             {slots.right?.()}

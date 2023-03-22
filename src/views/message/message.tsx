@@ -8,45 +8,65 @@ import {getFriend} from '../../http/address'
 import MessageStore from "../../store/MessageStore";
 // @ts-ignore
 import useUserInfo from '@/store/UserStore'
-import {changeArr} from "../layout/chatPage";
+import {changeArr} from "../chatPage";
 
 export type MsgDataType = {
   toId:string | number
   data:Array<any>
 }
+
 // const s = new
 export default defineComponent({
   setup(props,context){
     const userInfo = useUserInfo() // 个人信息
+
     const id = userInfo.userInfo.id
-    if(userInfo.userFriend.length >0){
+    // if(userInfo.userFriend && userInfo.userFriend.length >0){
+    //   getFriend(id).then(res=>{
+    //     userInfo.userFriend = res.data.data
+    //   })
+    // }
+    const friend = userInfo.userFriend
+    if(!friend ||friend.length<=0){console.log(6)
       getFriend(id).then(res=>{
         userInfo.userFriend = res.data.data
       })
     }
-    const friend = userInfo.userFriend
     const cardList = ref<MsgDataType[]>([]) // 渲染数据
     const MsgStore = MessageStore() // 持久化数据
     const chatShow = inject('chatShow') as Ref<boolean> // chat页面控制
-    const chatArr = inject('chatArr') // chat页面数据
-    watchEffect(()=>{
-      cardList.value = changeArr(MsgStore.MsgSSE)
-      cardList.value.forEach(item=>{ // 过滤数据
-        if(item.toId == MsgStore.currentToId){
-          MsgStore.currentMsgArr = item.data
-        }
+    // const stop = watchEffect(()=>{
+      // console.log(214)
+      // cardList.value = changeArr(MsgStore.MsgSSE)
+      // cardList.value.forEach(item=>{ // 过滤数据
+      //   if(item.toId == MsgStore.currentToId){
+      //     MsgStore.currentMsgArr = item.data
+      //   }
+      // })
+    // })
+
+  // watchEffect(()=>{
+  //   console.log(cardList.value)
+  // })
+    watch(cardList,(newValue,oldValue)=>{
+      // console.log('newValue')
+      // console.log(newValue)
+      // console.log('oldValue')
+      // console.log(oldValue)
+    },{immediate:true})
+    if( MsgStore.MsgSSE.length <= 0){
+      getReceiveMessage(id).then(res=>{
+        MsgStore.MsgSSE = res.data.data // 持久化
+        cardList.value = changeArr(res.data.data)
       })
-    })
-    getReceiveMessage(id).then(res=>{
-      MsgStore.MsgSSE = res.data.data // 持久化
-      cardList.value = changeArr(res.data.data)
-    })
+    }else {
+      cardList.value = changeArr(MsgStore.MsgSSE)
+    }
     let main = ref()
     nextTick(()=>{
       new BScroll(main.value,{
         click:true
       })
-
     })
 
     return ()=>{
@@ -59,19 +79,23 @@ export default defineComponent({
             {cardList.value.map((item, index,array) => {
               let i = 0 // 红点
               const data = item.data // 传入数据
-              const fr = friend.find((el)=>{
+              const friend =userInfo.userFriend && userInfo.userFriend.find((el)=>{
                 return el.friend_id == item.toId
-              })
+              });
+              // 二次渲染的凶手
+
+              // console.log(432)
               const lastMsg = data[data.length-1].msg
               data.forEach((item)=>{
                 if(item.status == 3) i ++
               })
-              return <MailCard unReadNum={i} lastMsg={lastMsg}  cardInfo={fr} onMyClick={() => {
+              return <MailCard unReadNum={i} lastMsg={lastMsg} cardInfo={friend}  onMyClick={() => {
                 MsgStore.currentMsgArr = data
-                chatArr.value = cardList
                 MsgStore.currentToId = item.toId;
                 chatShow && (chatShow.value = true)
-              }}></MailCard>
+              }}>
+                <button>删除</button>
+              </MailCard>
             })}
           </div>
         </div>

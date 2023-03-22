@@ -1,18 +1,35 @@
-# Vue 3 + TypeScript + Vite
+## 项目介绍
+   这是一个vue3 + typescript + JSX的实战项目 帮助对vue的理解与学习 手写组件 未使用大型UI组件库  
+   JSX语法可以帮助项目某些需要在一个页面编写多个组件的场景 因为有时候你只想封装一个小组件 并不希望再去创建一个文件的时候
+   JSX便可以解决这个问题 vue3对typescript的支持度更高 可以更好的保持项目的健壮性
+   
+## 项目技术栈
+   vue3 + typescript + vite + JSX语法 + axios + sass + flex + svg  
+   node版本 v16.13.0  
+   管理工具:yarn
 
-This template should help get you started developing with Vue 3 and TypeScript in Vite. The template uses Vue 3 `<script setup>` SFCs, check out the [script setup docs](https://v3.vuejs.org/api/sfc-script-setup.html#sfc-script-setup) to learn more.
+# 目标功能
+- [x] 聊天组件功能 -- 完成
+- [x] 登录功能 -- 完成
+- [x] 通讯录功能 -- 待续
+- [x] 朋友圈功能 -- 待续
+- [x] 已读功能 -- 完成
+- [x] 未读功能 -- 完成
+- [x] 发送信息功能 -- 完成
+- [x] 发送朋友圈功能 -- 完成
+- [x] 评论功能 -- 完成
+- [x] 备注功能 -- 待续
+- [x] TabBar组件 -- 完成
+- [x] 数据持久化 -- 完成
+- [x] 聊天消息数据转化 -- 完成
 
-## Recommended IDE Setup
 
-- [VS Code](https://code.visualstudio.com/) + [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) (and disable Vetur) + [TypeScript Vue Plugin (Volar)](https://marketplace.visualstudio.com/items?itemName=Vue.vscode-typescript-vue-plugin).
+# 项目布局
+```
+.
 
-## Type Support For `.vue` Imports in TS
+├── dist                                                // 项目打包路径
+├── src                                                 // 源码目录
 
-TypeScript cannot handle type information for `.vue` imports by default, so we replace the `tsc` CLI with `vue-tsc` for type checking. In editors, we need [TypeScript Vue Plugin (Volar)](https://marketplace.visualstudio.com/items?itemName=Vue.vscode-typescript-vue-plugin) to make the TypeScript language service aware of `.vue` types.
 
-If the standalone TypeScript plugin doesn't feel fast enough to you, Volar has also implemented a [Take Over Mode](https://github.com/johnsoncodehk/volar/discussions/471#discussioncomment-1361669) that is more performant. You can enable it by the following steps:
 
-1. Disable the built-in TypeScript Extension
-   1. Run `Extensions: Show Built-in Extensions` from VSCode's command palette
-   2. Find `TypeScript and JavaScript Language Features`, right click and select `Disable (Workspace)`
-2. Reload the VSCode window by running `Developer: Reload Window` from the command palette.

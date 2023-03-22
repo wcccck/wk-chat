@@ -14,9 +14,10 @@ export default defineComponent({
     const Router = useRouter()
     const TokenStore = useToken()
     const userInfo = useUserInfo()
+    // 点击事件
     const clickEvent = async function (e:Event){
       if(username.value == '' || password.value== ''){
-        alert('请输入')
+        alert('请输入用户名或者密码')
       }else{
         const result = await loginRequest({username:username.value,password:password.value})
         if(result.data && result.data.code == 200){
@@ -26,7 +27,11 @@ export default defineComponent({
           TokenStore.token = data.myToken
           await Router.push('/layout/message')
         }else{
-          alert(result.msg)
+          // @ts-ignore
+          if (result.msg && typeof result.msg === 'string') {
+            // @ts-ignore
+            alert(result.msg)
+          }
         }
 
       }
@@ -46,10 +51,8 @@ export default defineComponent({
                 right:()=> <div>
                   {InputType.value == 'text' ?  <Icon IconName={'yincang'} size={'2rem'} onMyClick={(e)=>{
                     InputType.value = 'password'
-                    console.log(2)
                   } }></Icon> : <Icon IconName={'show'} size={'2rem'} onMyClick={(e)=>{
                     InputType.value = 'text'
-                    console.log(3)
                   }}></Icon>}
 
                 </div>
@@ -58,7 +61,6 @@ export default defineComponent({
           </form>
 
         </div>
-        {/*@ts-ignore*/}
         <div style={{display:"flex",justifyContent:"center"}}><Button onMyClick={clickEvent}>login</Button></div>
       </div>
     }
@@ -66,14 +68,16 @@ export default defineComponent({
 
 })
 
+// 长按钮
 export const Button = defineComponent({
+  emits:['myClick'],
   setup(props,context){
     const defaultSlot = context.slots.default
     const {emit} = context
 
     return ()=>{
       return <button style={{fontSize:"40px"}} onTouchend={(e)=>{
-        emit('MyClick',e)
+        emit('myClick',e)
 
       } } class={classes.button}>{defaultSlot?.()}</button>
     }

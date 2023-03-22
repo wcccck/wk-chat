@@ -19,6 +19,17 @@
     //right: 0;
     left: 0;
     padding: 0px 18px;
+    .deleteBtn{
+      background:skyblue;
+      height:100%;
+      width:130px;
+      position:absolute;
+      color: white;
+      right:-150px;
+      display: flex;
+      align-items: center;
+      //justify-content: center;
+    }
   }
   //background: skyblue;
   .left{

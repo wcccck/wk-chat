@@ -1,0 +1,50 @@
+.container{
+  background: #ededed;
+  height: 100vh;
+  position: relative;
+  z-index: 2;
+  .header{
+    background: white;
+    display: flex;
+    justify-content: space-between;
+    padding: 12px;
+  }
+  .Info{
+    margin-top: -2px;
+    background: white;
+    display: flex;
+    padding: 20px;
+    .InfoLeft{
+      img{
+        width: 65px;
+        height: 65px;
+        border-radius: 8px;
+      }
+    }
+    .InfoRight{
+      margin-left: 10px;
+
+    }
+  }
+  .sendCell{
+    background: white;
+    margin-top: 10px;
+    display: flex;
+    justify-content: center;
+    position: relative;
+    .sendCellBox{
+      height: 50px;
+      display: flex;
+      align-items: center;
+    }
+    .sendCellBoxBottom{
+      position: absolute;
+      bottom:0;
+      height: 1px;
+      width: 100%;
+      background: #7f7f7f;
+      transform: scaleY(.1);
+    }
+
+  }
+}

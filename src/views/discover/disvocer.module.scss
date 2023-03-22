@@ -2,15 +2,69 @@
   box-sizing: border-box;
   padding-bottom: 58px;
   height: 100vh;
-  overflow: hidden;
-
+  overflow-x: hidden;
+  .sendPage{
+    position: fixed;
+    right: 10px;
+    top:10px;
+  }
   .headerBg{
-    margin-bottom: 20px;
-    height: 300px;
+    margin-bottom: 50px;
+    height: 340px;
     width: 100vw;
     //background-image: url("");
     background: no-repeat;
     background-size:100% 100%;
+    display: flex;
+    flex-direction: row-reverse;
+    align-items: flex-end;
+    img{
+      width: 70px;
+      margin-right: 26px;
+      margin-bottom: -20px;
+      border-radius: 9px;
+      border: 1px solid black;
+      height: 70px;
+    }
+  }
+  .sendInputDiv{
+    display: flex;
+    background-color: #f7f7f7;
+    align-items: center;
+    justify-content: space-between;
+    position: fixed;
+    bottom: 0px;
+    left: 0;
+    right: 0;
+    z-index: 1;
+    height: 40px;
+    .sendInput{
+      margin-left: 10px;
+      padding-left: 10px;
+      width: 80%;
+      height: 30px;
+      font-size: 15px;
+      border: none;
+    }
+    .sendBtn{
+
+    }
   }
 
+}
+.shade{
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0,0,0,.8);
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  .shadeImg{
+    width: 100vw;
+  }
 }

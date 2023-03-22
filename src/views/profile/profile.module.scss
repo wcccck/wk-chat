@@ -1,17 +1,56 @@
 .container{
-  //color: red;
-  .header{
-    background: #f8f8f8;
-    height: 50px;
-    position: sticky;
-    top: 0px;
-    z-index: 1;
-    padding-left: 10px;
-    padding-right: 20px;
+  background: #ededed;
+  height: 100vh;
+  box-sizing: border-box;
+  position: relative;
+  .cardList{
+    margin: 10px 0;
+  }
+  .CardContainer{
+    background: #fff;
+    height: 180px;
+    display: flex;
+    box-sizing: border-box;
+    padding: 0px 24px;
+    align-items: center;
+    margin-bottom: 10px;
+
+    .cardLeft{
+      img{
+        width: 65px;
+        height: 65px;
+        border-radius: 5px;
+      }
+    }
+    .cardCenter{
+      margin-left: 20px;
+      margin-top: 10px;
+      .username{
+        font-weight: 700;
+        font-size: 16px;
+        margin-bottom: 4px;
+      }
+      .chatID{
+        color: #a0a0a0;
+        font-size: 16px;
+        font-weight: 700;
+        margin-bottom: 5px;
+      }
+      button{
+        color: #a0a0a0;
+        font-weight: 700;
+        font-size: 15px;
+        background: none;
+        padding:1px 3px;
+        border-radius: 8px;
+      }
+    }
+  }
+  .cellBox{
     display: flex;
     align-items: center;
-    justify-content: center;
-    font-weight: 700;
-    font-size: 17px;
+    span{
+      margin-left: 12px;
+    }
   }
 }

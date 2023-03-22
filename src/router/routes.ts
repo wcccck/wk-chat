@@ -1,50 +1,58 @@
 import {RouteRecordRaw} from "vue-router";
-import Login from '../views/login/index'
-import Message from '../views/message/message'
-import Address from "../views/address/address";
-import layout from "../views/layout/layout";
-import linePage from "../views/linePage/linePage";
 import {getToken} from "../utils/token";
-import Discover from "../views/discover/discover";
-import Profile from "../views/profile/profile";
 const routes:RouteRecordRaw[] = [
-    {
+   {
     path:'/',
     redirect:'/layout/message'
   },
   {
     path:'/line',
-    component:linePage
+    component:()=> import('@/views/linePage/linePage')
   },
+
   {
     path:'/layout',
-    component:layout,
+    component:()=> import('@/views/layout/layout'),
     children:[
       {
+        path:'/layout/userInfo',
+        component:()=> import('@/views/userInfo/UserInfo'),
+        name:"UserInfo"
+      },
+      {
+        path:"/layout/chat",
+        component:()=> import('@/views/chatPage/chat'),
+        name:"Chat"
+      },
+      {
         path:'/layout/message',
-        component:Message,
+        component:()=> import('@/views/message/message'),
         name:"index"
       },
       {
         path:'/layout/address',
-        component:Address,
+        component:()=> import('@/views/address/address'),
         name:'Address'
       },
       {
         path:'/layout/discover',
-        component:Discover,
+        component:()=> import('@/views/discover/discover'),
         name:'Discover'
       },
       {
         path:'/layout/profile',
-        component:Profile,
+        component:()=> import('@/views/profile/profile'),
         name:'Profile',
+        children:[
+          {path:'/layout/profile/editPage',component:()=>import('@/views/profile/Pages/EditProfile/EditProfile'),
+          name:"EditPage"}
+        ]
       },
     ]
   },
     {
       path:'/login',
-      component:Login,
+      component:()=> import('@/views/login/login'),
       beforeEnter:(to,from,next)=>{ // 如果有token 就别来沾边
         const token = getToken()
         if(token && token !== ''){

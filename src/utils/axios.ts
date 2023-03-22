@@ -1,9 +1,10 @@
 import axios from "axios";
 import useTokenStore from '../store/tokenStore'
 import {setToken} from "./token";
-
+const BASE_URL = import.meta.env.VITE_BASE_URL
+console.log(BASE_URL)
 const serve = axios.create({
-  baseURL:"/api",
+  baseURL:BASE_URL,
   timeout:1000
 })
 
@@ -29,7 +30,6 @@ serve.interceptors.request.use((config)=>{
   }
   return config
 },(error)=>{
-
   return error
 })
 export default serve

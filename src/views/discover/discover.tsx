@@ -1,53 +1,150 @@
-import {defineComponent, ref} from "vue";
+import {defineComponent, Ref, ref,Transition,withModifiers} from "vue";
 import classes from './disvocer.module.scss'
-import FriendCard from './components/FriendCard'
+import FriendCard from './components/FriendCard/FriendCard'
 import List from "../../components/list/List";
+import {getAllDiscover} from '@/http/discover'
+import {stringChangeObject} from "../../utils";
+import Button from "../../components/button/Button";
+import Icon from "../../components/Icon/Icon";
+import EditPage from "./Pages/editPage/EditPage";
+import userStore from "../../store/UserStore";
+import {commentDiscover} from "../../http/discover";
+import PreviewCard from "@/views/discover/components/PreviewCard/PreviewCard";
 
-let i = 0
-function getData(){
-  return new Promise((resolve, reject)=>{
-    if(i>5) resolve('')
-    setTimeout(()=>{
-      i++;
-      resolve([1,3])
-    },1000)
-
-  })
+type DiscoverMsgType ={
+  author_id:string|number,
+  author_name:string,
+  comment:Array<any>,
+  createdAt?:string,
+  headImage:string,
+  id:string|number,
+  msgImages:Array<any>,
+  msgText:string
 }
 export default defineComponent({
 
   setup(props,context){
-    const arr = ref([1,3,4,7,89,9,9,9,6,4])
-    const ListLoad = ref(true)
-    const finish = ref(false)
-    async function loadFun() {
-      console.log('loading...')
-      const result= await getData()
-      console.log(result)
-      if(!result && result== ''){
-        ListLoad.value = false
-        finish.value = true
-      }
-      console.log(finish.value)
-      result instanceof Array && arr.value.push(...result)
+    function getDiscover(){
+      getAllDiscover().then(res=>{
+        const r = res.data.data
+        stringChangeObject(r)
+        discoverData.value = r
+        console.log(discoverData.value)
+      })
     }
+    getDiscover()
+    const user = userStore().userInfo
+    const discoverData = ref<Array<DiscoverMsgType>>([])
+    const shadeImg = ref('')
+    const shadeShow = ref(false)
+    const inputShow = ref(false)
+    const commentId = ref<string | number>(0)
+    const commentDom =ref()
+    const commentMsg = ref('')
+    const EditShowFlag = ref(false)
+
     return ()=>{
       return <div class={[classes.container]} >
-        <SelfHead></SelfHead>
-        <List isLoad={ListLoad.value} loadFun={loadFun} finish={finish.value} reFresh={()=>{console.log('刷新')} }>
-          {arr.value.map(item=>{
-            return <FriendCard  imgUrl={'http://localhost/panda.jpg'}></FriendCard>
+        {/*发送朋友圈Edit页跳转*/}
+        <Icon IconName={'paizhao'} size={'1.5rem'} class={classes.sendPage} onMyClick={(e)=>{
+          EditShowFlag.value = true
+        }}></Icon>
+        {/*<PreviewCard></PreviewCard>*/}
+
+        {/*朋友圈头像和背景*/}
+        <SelfHead headImage={user.headImage}></SelfHead>
+
+        {/*朋友圈信息render*/}
+        {discoverData.value.map(item=>{
+            console.log(item)
+            return <FriendCard cardInfo={item} onShowInput={({e,authorId})=>{
+              commentId.value = item.id
+              inputShow.value = true
+              commentDom.value.value = ''
+              setTimeout(()=>{commentDom.value.focus()},500)
+            } }  imgUrl={item.msgImages} onShadeImgShow={(e)=>{
+              console.log(e)
+              shadeImg.value = e
+              shadeShow.value = true
+            } }></FriendCard>
           })}
-        </List>
+
+
+        {/*朋友圈全屏显示*/}
+        <Shade pic={shadeImg.value} isShow={shadeShow.value} onShadeHide={()=>{
+          shadeShow.value = false
+        } }></Shade>
+
+
+        {/*评论框 默认hide*/}
+        <div class={classes.sendInputDiv} style={{display:inputShow.value ? 'block' : 'none'}}>
+          <input v-model={commentMsg.value} onKeyup={(e)=>{
+            if(e.key === 'Enter') {
+              inputShow.value = false
+              console.log('send')
+            }
+          }} ref={commentDom} placeholder={'评论...'} onBlur={()=>{
+            // console.log(123)
+            setTimeout(()=>{inputShow.value = false})
+          }} class={classes.sendInput} type="text"/>
+          <Button onMyClick={async ()=>{
+            const disId = commentId.value
+            const sendComent = {
+              msg:commentMsg.value,
+              id:user.id,
+              username:user.username
+            }
+            const result = await commentDiscover(sendComent,disId)
+            console.log(result)
+            commentMsg.value = ''
+            getDiscover()
+
+          } }>发送</Button>
+        </div>
+
+        {/*编辑页面*/}
+        <Transition name={'fade'}>
+          <div>
+            <EditPage onEditFlush={()=>{
+              getDiscover()
+              EditShowFlag.value = false
+            } } EditPageShow={EditShowFlag.value} onCancel={()=>{
+              EditShowFlag.value = false
+            } }></EditPage>
+          </div>
+        </Transition>
 
       </div>
     }
   }
 })
 
-const SelfHead = ()=>{
+const SelfHead = ({headImage}:{headImage:string})=>{
   return <div>
-    <div class={classes.headerBg} style={{backgroundImage:'url("http://localhost/head.jpg")'}}></div>
+    <div class={classes.headerBg} style={{backgroundImage:'url("http://localhost/Bg.jpg")'}}>
+      <img src={headImage} />
+    </div>
   </div>
 }
 
+const Shade = defineComponent({
+  emits:['ShadeHide'],
+  props:{
+    pic:{
+      type:String
+    },
+    isShow:{
+      type:Boolean
+    }
+  },
+  setup(props,context){
+    const {emit} = context
+    return ()=>{
+      return <div class={classes.shade} style={{display:props.isShow ? "flex":'none'}} onClick={(e)=>{
+        emit('ShadeHide')
+      } }>
+        <img src={props.pic} class={classes.shadeImg}/>
+      </div>
+    }
+  }
+})

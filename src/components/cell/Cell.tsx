@@ -4,24 +4,26 @@ import Icon from "../Icon/Icon";
 import {useRouter} from "vue-router";
 
 export default defineComponent({
+  emits:['wkClick'],
   props:{
     icon:{
       type:String
     },
     title:{
-      type:String,
-      required:true
+      type:String
     },
     to:{
       type:String
+    },
+    bottomBorder:{
+      type:Boolean
     }
   },
   setup(props,context){
-    const Router = useRouter()
     const {slots,emit} = context
     return ()=>{
       return <div class={classes.container} onClick={(e)=>{
-        emit("createChat",e)
+        emit("wkClick",e)
       } }>
 
         <div class={classes.left}>
@@ -30,7 +32,8 @@ export default defineComponent({
         <div class={classes.right}>
           {slots.right?.()}
         </div>
-        <div class={classes.bottom}></div>
+        {props.bottomBorder ? <div class={classes.bottom}></div> : ''}
+
       </div>
     }
   }

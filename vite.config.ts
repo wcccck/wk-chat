@@ -2,15 +2,35 @@ import { defineConfig } from 'vite'
 import vue from '@vitejs/plugin-vue'
 import viteJsx from '@vitejs/plugin-vue-jsx'
 import {createSvgIconsPlugin} from "vite-plugin-svg-icons";
-import postcsspxtoviewport from 'postcss-pxtorem'
+import postCssPxToRem from 'postcss-pxtorem'
+import {visualizer} from  'rollup-plugin-visualizer'
+import viteCompression from 'vite-plugin-compression'
 import path from 'path'
-
+// import {autoComplete, Plugin as PluginImportToCDN} from 'vite-plugin-cdn-import'
 // https://vitejs.dev/config/
 export default defineConfig({
+  base:"./",
   plugins: [vue(),viteJsx(),createSvgIconsPlugin({
     iconDirs:[path.resolve(process.cwd(),'src/assets/icons/svg')],
     symbolId:'icon-[dir]-[name]'
-  })],
+  }),visualizer({
+    emitFile:false,
+    filename:'stats.html',
+    open:true
+  }),viteCompression({
+    verbose:true, // 是否在控制台输出压缩结果
+    disable:false, // 是否禁用
+    threshold:10240, // 体积大于这个才会被压缩 单位b 1b=8B 1B = 1024KB 相当于9kb多就会压缩
+    algorithm:"gzip",
+    ext:".gz"
+  })
+  //   ,PluginImportToCDN({
+  //   prodUrl: 'https://unpkg.com/{name}@{version}/{path}',
+  //   modules:[
+  //       autoComplete('vue')
+  //   ]
+  // })
+  ],
   server:{
     proxy:{
       '/api':{
@@ -29,7 +49,8 @@ export default defineConfig({
   css:{
     postcss:{
       plugins: [
-        postcsspxtoviewport({
+        postCssPxToRem({
+          // rootValue: 16, ///
           unitToConvert: 'px', // 要转化的单位
           viewportWidth: 375, // UI设计稿的宽度
           unitPrecision: 6, // 转换后的精度，即小数点位数
@@ -44,6 +65,14 @@ export default defineConfig({
           landscape: false // 是否处理横屏情况
         })
       ]
+    }
+  },
+  build:{
+    minify:'terser',
+    terserOptions:{
+      compress:{
+        drop_console:true
+      }
     }
   }
 })

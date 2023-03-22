@@ -1,11 +1,11 @@
-import {defineComponent, inject, nextTick, PropType, provide, ref, watch, onUnmounted, watchEffect} from "vue";
+import {defineComponent, inject, nextTick, PropType, provide, ref, watch, onUnmounted, watchEffect, Ref} from "vue";
 import {useRoute,useRouter} from "vue-router";
 import classes from './chat.module.scss'
-import Icon from "../../../components/Icon/Icon";
-import Button from "../../../components/button/Button";
-import {MsgType} from "../../../http/Message";
-import userStore from "../../../store/UserStore";
-import MessageStore from "../../../store/MessageStore";
+import Icon from "../../components/Icon/Icon";
+import Button from "../../components/button/Button";
+import {MsgType} from "../../http/Message";
+import userStore from "../../store/UserStore";
+import MessageStore from "../../store/MessageStore";
 export default defineComponent({
   props:{
     chatArr:{
@@ -14,7 +14,7 @@ export default defineComponent({
 
   },
   setup(props,context){
-    const showChat = inject('chatShow')
+    const showChat = inject('chatShow') as Ref<boolean>
     const msgStore = MessageStore()
     const UserStore = userStore()
     const user = UserStore.userInfo
@@ -24,15 +24,26 @@ export default defineComponent({
     const nowFriend = friend.find(item=>{
       return item.friend_id == msgStore.currentToId
     })
+    type nowFriendType = {
+      createdAt?:string,
+      friend_id:string | number,
+      friend_image:string,
+      friend_name:string,
+      id:string |number,
+      user_id:string|number
+    }
+    console.log(nowFriend)
     const evtSource = new EventSource(`http://localhost:7777/chatSession/${sendId}`);
     // 初始化Message数据
-    const sendMsg = ref<MsgType>({
-      from:myId,
-      to:sendId,
-      msg:"",
-      type:"0",
-      status:"1"
-    })
+    const sendMsg = ref<MsgType>(
+        {
+          from:myId,
+          to:sendId,
+          msg:"",
+          type:"0",
+          status:"1"
+        }
+    )
 
     onUnmounted(()=>{
       evtSource.close()
@@ -57,15 +68,15 @@ export default defineComponent({
         <header>
           <Icon IconName={'zuojiantou'} size={'1.7rem'} onMyClick={()=>{
             showChat.value = false
-            msgStore.MsgCurrent = []
+            // msgStore.MsgCurrent = []
           }}></Icon>
-          <span style={{fontSize:"1.3rem"}}>{nowFriend.friend_name}</span>
+          <span style={{fontSize:"1.3rem"}}>{(nowFriend as nowFriendType).friend_name}</span>
           <Icon IconName={'more'} size={'1.7rem'} onMyClick={()=>{console.log(4576)}}></Icon>
           <div class={classes.bottom}></div>
         </header>
         <main ref={container}>
           {msgStore.currentMsgArr.map((item,index)=>{
-            return <Chat userImage={myId !== item.from  ?nowFriend.friend_image : ''} obj={item} Message={myId == item.from? 'right':'left'}></Chat>
+            return <Chat userImage={myId !== item.from  ?(nowFriend as nowFriendType).friend_image : ''} obj={item} Message={myId == item.from? 'right':'left'}></Chat>
           })}
         </main>
         <Footer container={container}></Footer>
@@ -112,17 +123,18 @@ const Chat = defineComponent({
       imgUrl.value = res.default as string
     })
     return ()=>{
+      // @ts-ignore
       return <div class={[classes.Chat]} style={{flexDirection:props.Message == 'right' ? "row-reverse" : ""}}>
           <img src={props.userImage?props.userImage : imgUrl.value} class={classes.headImag}/>
           <div ref={alertDom} class={[classes.Alert,props.Message == 'left' ? classes.leftAlert : classes.rightAlert]}>
-            <span>{obj.msg}</span>
+            <span>{obj?.msg}</span>
             <div class={[classes.triangle,props.Message == 'left' ? classes.triangleLeft : classes.triangleRight]}></div>
           </div>
       </div>
     }
   }
 })
-import {sendMessage} from "../../../http/Message";
+import {sendMessage} from "../../http/Message";
 const Footer = defineComponent({
   props:{
     container:{
@@ -131,11 +143,11 @@ const Footer = defineComponent({
   },
   setup(props,context){
 
-    const sendMsg =  inject('sendMsg')
+    const sendMsg =  inject('sendMsg') as Ref<MsgType>
     const inputVal = ref('')
     return ()=>{
       return <div class={classes.footer}>
-        <Icon IconName={'yuyin'} size={'65px'} onClick={()=>{console.log(12)} }></Icon>
+        <Icon IconName={'yuyin'} size={'65px'} onMyClick={()=>{console.log(12)} }></Icon>
         <input type="text" v-model={inputVal.value}/>
         <div class={classes.line}></div>
         <Button onMyClick={()=>{

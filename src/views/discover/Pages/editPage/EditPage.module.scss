@@ -1,0 +1,62 @@
+.container{
+  position: absolute;
+  width: 100vw;
+  height: 100vh;
+  left: 0;
+  top: 0;
+  background: #ffffff;
+  z-index: 1;
+  .EditHead{
+    display: flex;
+    justify-content: space-between;
+    padding: 10px;
+    .cancelBtn{
+      width: 50px;
+      font-size: 16px;
+      background: none;
+      border: none;
+    }
+  }
+  .EditInputDiv{
+    //width: 100%;
+    padding: 10px;
+    .picBody{
+      display: flex;
+      flex-wrap: wrap;
+      //justify-content: space-between;
+      padding: 0px 18px;
+    }
+    .EditInput{
+      width: 100%;
+      padding: 10px;
+      height: 100px;
+      border: none;
+      box-sizing: border-box;
+      font-size: 17px;
+      outline: none;
+      margin-bottom: 20px;
+    }
+    .EditPicInput{
+      width: 120px;
+      height: 120px;
+      background: #f7f7f7;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .previewPic{
+      margin-bottom: 15px;
+      position: relative;
+      .X{
+        position: absolute;
+        right: 10px;
+        top: 0;
+        color: white;
+        font-size: 20px;
+      }
+      width: 120px;
+      height: 120px;
+    }
+  }
+
+}

@@ -5,9 +5,11 @@ import userStore from "../../store/UserStore";
 import Icon from "../../components/Icon/Icon";
 import classes from './address.module.scss'
 import pinyin from "pinyin/lib/pinyin-web";
+console.log(pinyin)
 import BScroll from "better-scroll";
-import {changeArr} from "../layout/chatPage";
+import {changeArr} from "../chatPage";
 import MessageStore from "../../store/MessageStore";
+import {useRoute, useRouter} from "vue-router";
 export default defineComponent({
   setup(props,context){
     const user = userStore()
@@ -16,8 +18,7 @@ export default defineComponent({
     const friendList = ref([])
     // friendList
     const addressList:Ref<Array<Record<string, Array<any>>>> = ref([])
-    const MsgStore = MessageStore()
-
+    const router = useRouter()
 
     const friend = user.userFriend
     getFriend(id).then(res=>{
@@ -61,7 +62,7 @@ export default defineComponent({
     const letterArr = ref<Array<string>>([])
     const scroll = ref({})
     const startY = ref(0)
-    const chatShow = inject('chatShow')
+    const chatShow = inject('chatShow') as Ref<boolean>
     onUpdated(()=>{
       scroll.value = new BScroll(ctx.value,{
         click: true,
@@ -87,20 +88,30 @@ export default defineComponent({
             return  <div>
               <div class={classes.ItemTitle} id={key}>{key}</div>
               {arr.map((el,index)=>{
-                return <Cell icon={'youxiang'} title={`${item.id}`} onCreateChat={()=>{
-                  const fr_id = el.friend_id
-                  MsgStore.currentToId = fr_id
-                  const cardL = changeArr(MsgStore.MsgSSE).filter(item=>{
-                    return item.toId == fr_id
+                return <Cell icon={'youxiang'} title={`${item.id}`} onWkClick={()=>{
+                  console.log(el)
+                  router.push({
+                    // query:el,
+                    params: {
+                      ...el
+                    },
+                    name:"UserInfo"
+                    // path:"/layout/userInfo"
                   })
-                  MsgStore.currentMsgArr = cardL.length > 0 ? cardL[0].data : []
-                  chatShow.value = true
+                  // const fr_id = el.friend_id
+                  // MsgStore.currentToId = fr_id
+                  // const cardL = changeArr(MsgStore.MsgSSE).filter(item=>{
+                  //   return item.toId == fr_id
+                  // })
+                  // MsgStore.currentMsgArr = cardL.length > 0 ? cardL[0].data : []
+                  // chatShow.value = true
                 } }>
                   {{
                     left:()=>{
                       return <div class={classes.cellLeftSlot}>
                         <img class={classes.headImage} src={el.friend_image}/>
                         <div class={classes.textContainer}>
+                          {/*@ts-ignore*/}
                           <div style={{fontWeight:"800"}}>{el.friend_name}</div>
                         </div>
                       </div>
@@ -117,11 +128,15 @@ export default defineComponent({
         {/*@ts-ignore*/}
         <ListPick  onMyTouchstart={(e)=>{
           const item = document.getElementById(e.item)
-          scroll.value.scrollToElement(item)
-        }} onMyTouchMove={(e)=>{
+          if(scroll.value){
+
+          }
+          // scroll.value.scrollToElement(item)
+        }} onMyTouchMove={()=>{
 
         }
-        } arr={letterArr.value}  onMyClick={(e)=>{
+        } arr={letterArr.value}  onMyClick={(e:object)=>{
+          // @ts-ignore
           const item = document.getElementById(e.item)
           console.log(ctx.value)
         } }></ListPick>

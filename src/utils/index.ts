@@ -24,7 +24,7 @@ export function throttle(cb:Function,time:number){
 }
 
 export function debounce(cb:Function,time:number){
-  let timerNu
+  let timerNu: NodeJS.Timeout
   return function (){
     clearTimeout(timerNu)
     timerNu = setTimeout(()=>{
@@ -33,24 +33,47 @@ export function debounce(cb:Function,time:number){
   }
 }
 
-export function connectSSE(){
-  const evtSource = new EventSource('http://localhost:7777/stream');
-
-}
-
-export function ArrTransitionObj(f:Function,arr:Array<any>):object{
-  const length = arr.length
-  for(let i = 0;i<length;i++){
-
-  }
-  return {}
-}
 
 
-export function reCordSort(Arr:Array<Record<string, Array<any>>>):void{
 
-
-  Arr.forEach((item,index)=>{
-
+export function stringChangeObject(arr:Array<any>){
+  arr.forEach((item)=>{
+    for (const itemKey in item) {
+      if(itemKey === 'comment'){
+        item[itemKey]  =JSON.parse(item[itemKey])
+      }else if(itemKey === 'msgImages'){
+        item[itemKey]  =JSON.parse(item[itemKey])
+      }
+    }
   })
+}
+
+export  function stopDoubleClick(){
+  document.documentElement.addEventListener('touchstart', function (event) {
+    if (event.touches.length > 1) {
+      event.preventDefault()
+    }
+  }, { passive: false })
+
+// 禁用双击放大
+  let lastTouchEnd = 0
+  document.documentElement.addEventListener('touchend', function (event) {
+    let now = Date.now()
+    if (now - lastTouchEnd <= 300) {
+      event.preventDefault()
+    }
+    lastTouchEnd = now
+  }, { passive: false })
+}
+
+export function setSessionData(data:any,key:string){
+  let sessionData = JSON.stringify(data)
+  sessionStorage.setItem(key,sessionData)
+}
+
+export function getSessionData(key:string){
+  return sessionStorage.getItem(key) || ''
+}
+export function logOut(){
+
 }

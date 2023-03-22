@@ -2,6 +2,7 @@ import {defineComponent} from "vue";
 import Icon from '../Icon/Icon'
 import classes from "./Button.module.scss";
 export default defineComponent({
+  emits:['myClick'],
   props:{
     icon:{
       type:String,

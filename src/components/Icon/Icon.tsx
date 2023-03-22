@@ -2,6 +2,7 @@ import {computed, defineComponent} from "vue";
 
 import classes from './Icon.module.scss'
 export default defineComponent({
+  emits:['myClick'],
   props:{
     IconName:{
       type:String,
@@ -22,7 +23,7 @@ export default defineComponent({
       return `#icon-${props.IconName}`
     })
     return ()=>{
-      return   <svg aria-hidden='true' class={classes.iconSvg} style={{height:props.size,width:props.size}} onTouchend={(e)=>{emit('myClick',e)} }>
+      return   <svg aria-hidden='true' class={classes.iconSvg} style={{width:props.size}} onTouchend={(e)=>{emit('myClick',e)} }>
         {/*<use xlink:href={LastName.value}   fill='red'/>*/}
         <use xlinkHref={LastName.value}   fill='red'/>
       </svg>

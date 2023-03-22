@@ -1,0 +1,11 @@
+.container{
+  display: flex;
+  .right{
+    display: flex;
+    margin-left: 20px;
+    .Imag{
+      width: 50px;
+      margin-right: 5px;
+    }
+  }
+}
