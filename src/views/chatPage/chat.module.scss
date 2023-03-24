@@ -113,13 +113,28 @@ $tColor:var(--textColor,#ffffff);
     display: flex;
     align-items: center;
     padding: 2px 8px;
-    input{
+    //input{
+    //  margin-left: 10px;
+    //  margin-right: 10px;
+    //  flex: 1;
+    //  width: 240px;
+    //  background: #ffffff;
+    //  height: 30px;
+    //  border-radius: 4px;
+    //  box-sizing: border-box;
+    //  padding:0 10px ;
+    //  border: none;
+    //  outline: none;
+    //  font-size: 14px;
+    //}
+    .voice{
       margin-left: 10px;
       margin-right: 10px;
       flex: 1;
       width: 240px;
       background: #ffffff;
       height: 30px;
+      line-height: 30px;
       border-radius: 4px;
       box-sizing: border-box;
       padding:0 10px ;

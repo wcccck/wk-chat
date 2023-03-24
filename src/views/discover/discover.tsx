@@ -1,7 +1,5 @@
-import {defineComponent, Ref, ref,Transition,withModifiers} from "vue";
+import {defineComponent, ref,Transition} from "vue";
 import classes from './disvocer.module.scss'
-import FriendCard from './components/FriendCard/FriendCard'
-import List from "../../components/list/List";
 import {getAllDiscover} from '@/http/discover'
 import {stringChangeObject} from "../../utils";
 import Button from "../../components/button/Button";
@@ -9,9 +7,9 @@ import Icon from "../../components/Icon/Icon";
 import EditPage from "./Pages/editPage/EditPage";
 import userStore from "../../store/UserStore";
 import {commentDiscover} from "../../http/discover";
-import PreviewCard from "@/views/discover/components/PreviewCard/PreviewCard";
+import FriendCard from "@/views/discover/components/FriendCard/FriendCard";
 
-type DiscoverMsgType ={
+export type DiscoverMsgType ={
   author_id:string|number,
   author_name:string,
   comment:Array<any>,
@@ -33,6 +31,7 @@ export default defineComponent({
       })
     }
     getDiscover()
+
     const user = userStore().userInfo
     const discoverData = ref<Array<DiscoverMsgType>>([])
     const shadeImg = ref('')

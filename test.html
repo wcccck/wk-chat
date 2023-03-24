@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<audio id="aud" src="" autoplay controls type="audio/webm"></audio>
+<button id="startBtn">start</button>
+<script>
+  const btn = document.getElementById('startBtn')
+    let chunks = []
+  const mimeType = 'audio/webm';
+  let recorder
+  btn.addEventListener("click",()=>{
+    console.log(recorder)
+    if(recorder.state === 'inactive'){
+      recorder.start()
+      btn.innerText = 'stop'
+    }else{
+      btn.innerText = 'start'
+      recorder.stop()
+    }
+
+  })
+  async function getPression(){
+    return  navigator.mediaDevices.getUserMedia({
+      audio:true,
+      video:false
+    }).then(stream=>{
+      console.log(stream)
+      return stream
+    })
+  }
+
+  getPression().then(stream=>{
+    // console.log(stream)
+    if(stream){
+      recorder = new MediaRecorder(stream,{
+        mimeType:'audio/webm'
+      })
+      recorder.addEventListener('dataavailable', event => {
+        if (typeof event.data === 'undefined') return;
+        if (event.data.size === 0) return;
+        chunks.push(event.data);
+      });
+
+      recorder.addEventListener('stop', () => {
+        const recording = new Blob(chunks, {
+          type: "audio/webm;codecs=opus"
+        });
+        console.log(chunks)
+        const blobUrl = URL.createObjectURL(recording);
+        console.log(blobUrl)
+        const aud = document.getElementById('aud')
+        aud.src = blobUrl
+        chunks = [];
+      });
+    }
+  })
+
+
+  /**
+   * 监听
+   */
+
+</script>
+</body>
+</html>

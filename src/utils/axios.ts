@@ -1,6 +1,6 @@
 import axios from "axios";
 import useTokenStore from '../store/tokenStore'
-import {setToken} from "./token";
+import {clearToken, setToken} from "./token";
 const BASE_URL = import.meta.env.VITE_BASE_URL
 console.log(BASE_URL)
 const serve = axios.create({
@@ -17,7 +17,7 @@ serve.interceptors.response.use((res)=>{
       console.log()
       if(err.response.data.code && err.response.data.code==401){
         tokenStore.token = ''
-        setToken('')
+        clearToken()
       }
   return err.response.data
 })

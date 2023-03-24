@@ -7,14 +7,8 @@ import {MsgType} from "../../http/Message";
 import userStore from "../../store/UserStore";
 import MessageStore from "../../store/MessageStore";
 export default defineComponent({
-  props:{
-    chatArr:{
-      type: Object
-    },
-
-  },
   setup(props,context){
-    const showChat = inject('chatShow') as Ref<boolean>
+    const router =useRouter()
     const msgStore = MessageStore()
     const UserStore = userStore()
     const user = UserStore.userInfo
@@ -44,7 +38,6 @@ export default defineComponent({
           status:"1"
         }
     )
-
     onUnmounted(()=>{
       evtSource.close()
     })
@@ -64,11 +57,10 @@ export default defineComponent({
       }
     })
     return ()=>{
-      return <div class={classes.container}  style={{display:showChat?.value == true ? 'block':"none"}}>
+      return <div class={classes.container} >
         <header>
           <Icon IconName={'zuojiantou'} size={'1.7rem'} onMyClick={()=>{
-            showChat.value = false
-            // msgStore.MsgCurrent = []
+            router.back()
           }}></Icon>
           <span style={{fontSize:"1.3rem"}}>{(nowFriend as nowFriendType).friend_name}</span>
           <Icon IconName={'more'} size={'1.7rem'} onMyClick={()=>{console.log(4576)}}></Icon>
@@ -76,7 +68,7 @@ export default defineComponent({
         </header>
         <main ref={container}>
           {msgStore.currentMsgArr.map((item,index)=>{
-            return <Chat userImage={myId !== item.from  ?(nowFriend as nowFriendType).friend_image : ''} obj={item} Message={myId == item.from? 'right':'left'}></Chat>
+            return <Chat userImage={myId !== item.from  ?(nowFriend as nowFriendType).friend_image : user.headImage} obj={item} Message={myId == item.from? 'right':'left'}></Chat>
           })}
         </main>
         <Footer container={container}></Footer>
@@ -145,10 +137,29 @@ const Footer = defineComponent({
 
     const sendMsg =  inject('sendMsg') as Ref<MsgType>
     const inputVal = ref('')
+    const inputShowFlag = ref(true)
+    let record;
+    // navigator.mediaDevices.getUserMedia({audio:true,video:true}).then((stream)=>{
+    //
+    // })
+    const touchVoiceStart = function (){
+      // record = new MediaRecorder()
+    }
+    const touchVoiceMove = function (){
+
+    }
+
+    const touchVoiceEnd = function (){
+
+    }
     return ()=>{
       return <div class={classes.footer}>
-        <Icon IconName={'yuyin'} size={'65px'} onMyClick={()=>{console.log(12)} }></Icon>
-        <input type="text" v-model={inputVal.value}/>
+        <video src="" width="160" height="120"></video>
+        <Icon IconName={'yuyin'} size={'65px'} onMyClick={()=>{
+          inputShowFlag.value = false
+        } }></Icon>
+        <input class={classes.voice} type="text" style={{display:inputShowFlag.value ? 'block':'none'}} v-model={inputVal.value}/>
+        <div  class={classes.voice} style={{display:!inputShowFlag.value ? 'block':'none',textAlign:"center"}}>长按语音</div>
         <div class={classes.line}></div>
         <Button onMyClick={()=>{
             if(inputVal.value.trim() == '') {

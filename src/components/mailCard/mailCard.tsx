@@ -63,20 +63,20 @@ export default defineComponent({
       if(left < -100){
         let set = setInterval(()=>{
           if(left <= -220) {
-            container.value.style.left = -220+'px'
+            container.value && (container.value.style.left = -220+'px')
             clearInterval(set)
           }
-          container.value.style.left = left-- + 'px'
+          container.value && (container.value.style.left = left-- + 'px')
           startSlide.value = true
         })
       }else{
         let set = setInterval(()=>{
           if(left>=0){
             console.log(2)
-            container.value.style.left = 0+'px'
+            container.value && ( container.value.style.left = 0+'px')
             clearInterval(set)
           }
-          container.value.style.left = (left++) + 'px'
+          container.value &&(  container.value.style.left = (left++) + 'px')
           startSlide.value = true
         })
       }
@@ -98,7 +98,7 @@ export default defineComponent({
             </div>
             <div class={classes.right}>
               <div class={classes.fromTitle}>
-                {props.cardInfo?.friend_name}
+                {props.cardInfo?.alias? props.cardInfo.alias : props.cardInfo?.friend_name}
               </div>
               <h3 class={classes.LineMessage}>{props.lastMsg}
               </h3>

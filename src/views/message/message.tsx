@@ -9,6 +9,7 @@ import MessageStore from "../../store/MessageStore";
 // @ts-ignore
 import useUserInfo from '@/store/UserStore'
 import {changeArr} from "../chatPage";
+import {useRouter} from "vue-router";
 
 export type MsgDataType = {
   toId:string | number
@@ -19,48 +20,20 @@ export type MsgDataType = {
 export default defineComponent({
   setup(props,context){
     const userInfo = useUserInfo() // 个人信息
-
+    const Router = useRouter()
     const id = userInfo.userInfo.id
-    // if(userInfo.userFriend && userInfo.userFriend.length >0){
-    //   getFriend(id).then(res=>{
-    //     userInfo.userFriend = res.data.data
-    //   })
-    // }
     const friend = userInfo.userFriend
     if(!friend ||friend.length<=0){console.log(6)
       getFriend(id).then(res=>{
         userInfo.userFriend = res.data.data
       })
     }
-    const cardList = ref<MsgDataType[]>([]) // 渲染数据
-    const MsgStore = MessageStore() // 持久化数据
-    const chatShow = inject('chatShow') as Ref<boolean> // chat页面控制
-    // const stop = watchEffect(()=>{
-      // console.log(214)
-      // cardList.value = changeArr(MsgStore.MsgSSE)
-      // cardList.value.forEach(item=>{ // 过滤数据
-      //   if(item.toId == MsgStore.currentToId){
-      //     MsgStore.currentMsgArr = item.data
-      //   }
-      // })
-    // })
-
-  // watchEffect(()=>{
-  //   console.log(cardList.value)
-  // })
-    watch(cardList,(newValue,oldValue)=>{
-      // console.log('newValue')
-      // console.log(newValue)
-      // console.log('oldValue')
-      // console.log(oldValue)
-    },{immediate:true})
+    const MsgStore = MessageStore()
     if( MsgStore.MsgSSE.length <= 0){
       getReceiveMessage(id).then(res=>{
         MsgStore.MsgSSE = res.data.data // 持久化
-        cardList.value = changeArr(res.data.data)
+        // cardList.value = changeArr(res.data.data)
       })
-    }else {
-      cardList.value = changeArr(MsgStore.MsgSSE)
     }
     let main = ref()
     nextTick(()=>{
@@ -76,7 +49,7 @@ export default defineComponent({
         </div>
         <div class={['wrapper', classes.main]} ref={main}>
           <div class={[classes.container, 'content']}>
-            {cardList.value.map((item, index,array) => {
+            {changeArr(MsgStore.MsgSSE).map((item, index,array) => {
               let i = 0 // 红点
               const data = item.data // 传入数据
               const friend =userInfo.userFriend && userInfo.userFriend.find((el)=>{
@@ -87,12 +60,14 @@ export default defineComponent({
               // console.log(432)
               const lastMsg = data[data.length-1].msg
               data.forEach((item)=>{
+                console.log(item)
                 if(item.status == 3) i ++
               })
               return <MailCard unReadNum={i} lastMsg={lastMsg} cardInfo={friend}  onMyClick={() => {
                 MsgStore.currentMsgArr = data
                 MsgStore.currentToId = item.toId;
-                chatShow && (chatShow.value = true)
+                Router.push('/layout/chat')
+                // chatShow && (chatShow.value = true)
               }}>
                 <button>删除</button>
               </MailCard>

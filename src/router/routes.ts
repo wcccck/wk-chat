@@ -6,14 +6,14 @@ const routes:RouteRecordRaw[] = [
     redirect:'/layout/message'
   },
   {
-    path:'/line',
-    component:()=> import('@/views/linePage/linePage')
-  },
-
-  {
     path:'/layout',
     component:()=> import('@/views/layout/layout'),
     children:[
+      {
+        path:'/layout/single',
+        component: ()=> import('@/views/singleDiscover/singleDiscover'),
+        name:"SingleDiscover"
+      },
       {
         path:'/layout/userInfo',
         component:()=> import('@/views/userInfo/UserInfo'),
