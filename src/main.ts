@@ -8,9 +8,8 @@ import Router from "./router";
 import {MessageBox} from '@/components/MessageBox/MessageBox'
 
 // import 'default-passive-events' // 默认行为
-import {stopDoubleClick} from "@/utils";
-// 禁用双指放大
-stopDoubleClick()
+// import {stopDoubleClick} from "@/utils";
+
 
 createApp(App).use(createPinia().use(createPersistedState({
   serializer:{
@@ -18,6 +17,6 @@ createApp(App).use(createPinia().use(createPersistedState({
     deserialize:JSON.parse
   }
 }))).use(Router).mount('#app')
-MessageBox('hahah')
+// MessageBox('hahah')
 
 
