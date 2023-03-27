@@ -14,7 +14,6 @@ serve.interceptors.response.use((res)=>{
 },
     err=>{
       const tokenStore = useTokenStore()
-      console.log()
       if(err.response.data.code && err.response.data.code==401){
         tokenStore.token = ''
         clearToken()
