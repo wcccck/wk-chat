@@ -3,7 +3,16 @@
   display: flex;
   padding: 10px 10px;
   box-sizing: border-box;
-  border-bottom: 1px solid gray;
+  position: relative;
+  //border-bottom: 1px solid gray;
+  .bottomLine{
+    height: 1px;
+    width: 100vw;
+    background: gray;
+    transform: scaleY(.2);
+    position: absolute;
+    bottom: 0;
+  }
   .username{
     color: #646a91;
     font-weight: 700;
@@ -38,16 +47,31 @@
   border: 1px solid black;
   outline: none;
 }
-.showInputDiv{
+.timeAndBtn{
   display: flex;
-  flex-direction: row-reverse;
-  .showInput{
-    border-radius: 5px;
-    width: 25px;
-    height: 23px;
-    font-size: 20px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+  justify-content: space-between;
+  margin: 10px 0;
+}
+.showInputDiv{
+  //display: flex;
+  //flex-direction: row-reverse;
+  text-align: center;
+  background: #f7f7f7;
+  color: #52688f;
+  font-size:17px;
+  width: 28px;
+  height: 22px;
+  border-radius: 5px;
+  border: none;
+
+
+}
+
+.comment{
+  box-sizing: border-box;
+  padding: 12px 8px;
+  background: #f7f7f7;
+  .commentName{
+    color: #8b8ea2;
   }
 }

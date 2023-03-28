@@ -1,9 +1,9 @@
-import {defineComponent, Ref, ref} from "vue";
+import {defineComponent, inject, provide, Ref, ref} from "vue";
 import classes from './UserInfo.module.scss'
 import Cell from "@/components/cell/Cell";
 import Icon from "@/components/Icon/Icon";
 import EditContact from "./Pages/EditContact/EditContact";
-import {useRoute, useRouter} from "vue-router";
+import {useRoute, useRouter,Router} from "vue-router";
 import {FriendInfo} from "@/store/UserStore";
 import {getSessionData, setSessionData} from "@/utils";
 import {changeArr} from "@/views/chatPage";
@@ -14,6 +14,8 @@ export default defineComponent({
   setup(props,context){
     const params = useRoute().params as FriendInfo
     const renderData = ref<FriendInfo>()
+    const Router = useRouter()
+    provide('router',Router)
     if(Object.keys(params).length > 0){
       renderData.value = {...params}
       setSessionData(params,'userInfo')
@@ -48,12 +50,20 @@ export default defineComponent({
         </Cell>
         <MsgChat onMyClick={()=>{
           const MsgStore = MessageStore()
-          changeArr(MsgStore.MsgSSE).forEach((item)=>{
-            if(item.toId === renderData.value?.friend_id){
-              MsgStore.currentMsgArr = item.data
-            }
+          const curentMsg = changeArr(MsgStore.MsgSSE)
+          const nowFriend = curentMsg.find(item=>{
+            return item.toId == renderData.value?.friend_id
           })
-          console.log('进入chat页面')
+          if(nowFriend){
+            MsgStore.currentMsgArr = nowFriend.data
+            MsgStore.currentToId = nowFriend.toId
+          }else{
+            MsgStore.currentMsgArr = []
+            MsgStore.currentToId = renderData.value!.friend_id
+          }
+          // console.log(MsgStore.currentMsgArr)
+          // console.log(MsgStore.currentToId)
+          Router.push('/layout/chat')
         } }></MsgChat>
         {EditContactShowFlag.value ? <EditContact onCancel={()=>{
           EditContactShowFlag.value = false
@@ -66,7 +76,7 @@ export default defineComponent({
 
 const Header = defineComponent({
   setup(props,context){
-    const Router = useRouter()
+    const Router = inject('router') as Router
     return ()=>{
       return <header class={classes.header}>
         <Icon IconName={'zuojiantou'} onMyClick={()=>{
