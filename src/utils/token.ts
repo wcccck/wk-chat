@@ -8,3 +8,7 @@ export const setToken = function (JWt:string){
     localStorage.setItem('currentTime',Date.now().toString())
   }
 }
+
+export const clearToken = function (){
+  localStorage.removeItem('token')
+}

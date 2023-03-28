@@ -1,5 +1,6 @@
 import {useWindowSize } from '@vueuse/core'
-
+import {clearToken} from "@/utils/token";
+import TokenStore from "@/store/tokenStore";
 export const isMobile = function (){
   const {width,height} = useWindowSize()
   window.addEventListener('resize',()=>{
@@ -75,5 +76,7 @@ export function getSessionData(key:string){
   return sessionStorage.getItem(key) || ''
 }
 export function logOut(){
-
+  clearToken()
+  const store = TokenStore()
+  store.token = ''
 }

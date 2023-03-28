@@ -1,4 +1,4 @@
-import {defineComponent, PropType, ref} from "vue";
+import {computed, defineComponent, PropType, ref} from "vue";
 import classes from './FriendCard.module.scss'
 
 export type cardInfoType = {
@@ -10,6 +10,13 @@ export type cardInfoType = {
   comment:Array<any>
 }
 
+function dataFormat(data?:string){
+  const first = data?.split('T')[0]
+  const last = data?.split('T')[1]
+  const current = first + '---' + last
+
+  return current
+}
 
 export default defineComponent({
   emits:['shadeImgShow','showInput'],
@@ -44,26 +51,28 @@ export default defineComponent({
             })}
 
           </div>
-          {/*发布时间*/}
-          <div>
-            <div>{cardInfo.createdAt}</div>
-          </div>
-          {/*输入库*/}
-          <div class={classes.showInputDiv}>
-            <button class={classes.showInput} onTouchend={(e) => {
+
+          <div class={classes.timeAndBtn}>
+            {/*发布时间*/}
+            <div>{dataFormat(cardInfo.createdAt)}</div>
+
+            {/*输入库*/}
+            <div class={classes.showInputDiv}  onTouchend={(e) => {
               context.emit('showInput', {e,authorId:cardInfo.author_id})
-            }}>...
-            </button>
+            }}>
+              ··
+          </div>
+
           </div>
           {/*评论区*/}
-          <div>
+          <div class={classes.comment}>
             {cardInfo.comment ? cardInfo.comment.map(item=>{
-              return <div>{item.name}:   {item.msg}</div>
+              return <div><span class={classes.commentName}>{item.name}</span>:   {item.msg}</div>
             }) : ''}
           </div>
 
         </div>
-
+        <div class={classes.bottomLine}></div>
       </div>
     }
   }
