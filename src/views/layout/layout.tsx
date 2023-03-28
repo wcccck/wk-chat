@@ -1,6 +1,6 @@
 import {defineComponent, provide, inject, ref, KeepAlive, Transition, watch, watchEffect} from "vue";
 import Tabbar, {TabItem} from "../../components/tabbar/tabbar";
-import {RouterView, useRouter} from "vue-router";
+import {RouterView, useRoute, useRouter} from "vue-router";
 import classes from './layout.module.scss'
 import Chat from "../chatPage/chat";
 import useUserInfo from '@/store/UserStore'
@@ -14,7 +14,7 @@ export default defineComponent({
     const MsgStore = MessageStore()
     const token = TokenStore()
     const Router = useRouter()
-    // 监听token变化
+    // tokenClear
     watch(token,(newValue,oldValue)=>{
       if(!newValue.token){
         clearToken()
@@ -23,12 +23,7 @@ export default defineComponent({
     },)
     const userInfo = useUserInfo() // 个人信息
     const id = userInfo.userInfo.id
-
-    // const chatArr = ref([])
-    // watch(chatArr.value,(newValue,old)=>{
-    //   console.log('watch')
-    //   console.log(newValue)
-    // })
+    const route = useRoute()
     const evtSource = new EventSource(`http://localhost:7777/stream/${id}`); // 开启SSE链接
     evtSource.onmessage = function (e) {
       console.log('推送')
@@ -40,7 +35,6 @@ export default defineComponent({
       })
       currentArr && (MsgStore.currentMsgArr = currentArr.data)
     }
-    // provide('chatArr',chatArr)
     return ()=>{
       return <div class={classes.layout}>
         <RouterView></RouterView>
@@ -50,9 +44,6 @@ export default defineComponent({
           <TabItem title={'发现'} Icon={'faxian'} path={'/layout/discover'}></TabItem>
           <TabItem title={'个人'} Icon={'me'} path={'/layout/profile'}></TabItem>
         </Tabbar>
-        {/*<Transition name={'fade'}>*/}
-        {/*  {chatShow.value ? <Chat chatArr={chatArr}></Chat> : ''}*/}
-        {/*</Transition>*/}
 
 
 
