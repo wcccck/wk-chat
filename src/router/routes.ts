@@ -27,25 +27,40 @@ const routes:RouteRecordRaw[] = [
       {
         path:'/layout/message',
         component:()=> import('@/views/message/message'),
-        name:"index"
+        name:"index",
+        meta:{
+          tabId:0
+        }
       },
       {
         path:'/layout/address',
         component:()=> import('@/views/address/address'),
-        name:'Address'
+        name:'Address',
+        meta:{
+          tabId:1
+        }
       },
       {
         path:'/layout/discover',
         component:()=> import('@/views/discover/discover'),
-        name:'Discover'
+        name:'Discover',
+        meta:{
+          tabId:2
+        }
       },
       {
         path:'/layout/profile',
         component:()=> import('@/views/profile/profile'),
         name:'Profile',
+        meta:{
+          tabId:3
+        },
         children:[
-          {path:'/layout/profile/editPage',component:()=>import('@/views/profile/Pages/EditProfile/EditProfile'),
-          name:"EditPage"}
+          {
+            path:'/layout/profile/editPage',
+            component:()=>import('@/views/profile/Pages/EditProfile/EditProfile'),
+            name:"EditPage"
+          }
         ]
       },
     ]

@@ -1,6 +1,6 @@
 import {defineComponent, PropType, provide, inject, ref, Ref} from "vue";
 import classes from './tabbar.module.scss'
-import {useRouter, RouteLocationRaw} from "vue-router";
+import {useRouter, RouteLocationRaw, useRoute} from "vue-router";
 import useIndex from '../../store/TabBarIndex'
 import Icon from "../Icon/Icon";
 export default defineComponent({
@@ -48,18 +48,18 @@ export const TabItem = defineComponent({
   setup(props, {emit}) {
     const activeIndex =  inject('activeIndex') as Ref<number>
     const index = useIndex()
+    const route = useRoute()
     const ItemClick = function () {
       activeIndex.value = props.itemIndex as number
       index.activeIndex = props.itemIndex as number
-      console.log('props item ' + props.itemIndex)
       Router.push(props.path!)
     }
     const Router = useRouter()
     return () => {
       return (
 
-          <span onTouchend={ItemClick} class={[(props.itemIndex == index.activeIndex)? classes.activeItem : '',classes.tab]}>
-            {props.Icon ? <Icon size={'50px'} IconName={props.itemIndex == index.activeIndex? props.Icon +'_r' : props.Icon}></Icon> : ''}
+          <span onTouchend={ItemClick} class={[(props.itemIndex == route.meta.tabId)? classes.activeItem : '',classes.tab]}>
+            {props.Icon ? <Icon size={'50px'} IconName={props.itemIndex ==  route.meta.tabId? props.Icon +'_r' : props.Icon}></Icon> : ''}
             {props.title}
           </span>
       )
