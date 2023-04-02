@@ -1,12 +1,10 @@
-import {defineComponent, provide, inject, ref, KeepAlive, Transition, watch, watchEffect} from "vue";
+import {defineComponent, watch} from "vue";
 import Tabbar, {TabItem} from "../../components/tabbar/tabbar";
-import {RouterView, useRoute, useRouter} from "vue-router";
+import {RouterView, useRouter} from "vue-router";
 import classes from './layout.module.scss'
-import Chat from "../chatPage/chat";
 import useUserInfo from '@/store/UserStore'
 import MessageStore from "../../store/MessageStore";
 import {changeArr} from "../chatPage";
-import {MsgDataType} from "@/views/message/message";
 import TokenStore from "@/store/tokenStore";
 import {clearToken} from "@/utils/token";
 export default defineComponent({
@@ -14,6 +12,8 @@ export default defineComponent({
     const MsgStore = MessageStore()
     const token = TokenStore()
     const Router = useRouter()
+    const userInfo = useUserInfo() // 个人信息
+    const id = userInfo.userInfo.id
     // tokenClear
     watch(token,(newValue,oldValue)=>{
       if(!newValue.token){
@@ -21,12 +21,9 @@ export default defineComponent({
         Router.push('/login')
       }
     },)
-    const userInfo = useUserInfo() // 个人信息
-    const id = userInfo.userInfo.id
-    const route = useRoute()
-    const evtSource = new EventSource(`http://localhost:7777/stream/${id}`); // 开启SSE链接
+    const evtSource = new EventSource(`http://localhost:7777/stream/${id}`); // 开启SSE
     evtSource.onmessage = function (e) {
-      console.log('推送')
+      console.log('服务端推送')
       const DBArr = JSON.parse(e.data) as Array<any>
       MsgStore.MsgSSE = [...DBArr]
       const data = changeArr(MsgStore.MsgSSE)
@@ -44,9 +41,6 @@ export default defineComponent({
           <TabItem title={'发现'} Icon={'faxian'} path={'/layout/discover'}></TabItem>
           <TabItem title={'个人'} Icon={'me'} path={'/layout/profile'}></TabItem>
         </Tabbar>
-
-
-
       </div>
     }
   }

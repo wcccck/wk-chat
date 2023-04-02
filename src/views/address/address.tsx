@@ -62,7 +62,7 @@ export default defineComponent({
     const letterArr = ref<Array<string>>([])
     const scroll = ref({})
     const startY = ref(0)
-    const chatShow = inject('chatShow') as Ref<boolean>
+    
     onUpdated(()=>{
       scroll.value = new BScroll(ctx.value,{
         click: true,

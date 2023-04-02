@@ -2,11 +2,9 @@ import {defineComponent, ref} from "vue";
 import classes from "./profile.module.scss";
 import Cell from "../../components/cell/Cell";
 import Icon from "../../components/Icon/Icon";
-import EditProfile from "@/views/profile/Pages/EditProfile/EditProfile";
 import UserStore from "@/store/UserStore";
 import {RouterView, useRouter} from "vue-router";
 import {logOut} from "@/utils";
-import router from "@/router";
 const arr = [
   {
     IconName:"box",
@@ -33,7 +31,6 @@ export default defineComponent({
 
   setup(props,context){
     return ()=>{
-      const Router = useRouter()
       return <div class={classes.container}>
         <Card></Card>
         <Cell title={'Services'}>
@@ -68,7 +65,6 @@ export default defineComponent({
         </div>
         <Cell title={'Settings'} onWkClick={()=>{
           logOut()
-          // Router.push('/login')
         } }>
           {{
             left:()=>

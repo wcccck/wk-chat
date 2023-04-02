@@ -1,12 +1,10 @@
-import {defineComponent, inject, nextTick, Ref, ref, Transition, watch, watchEffect} from "vue";
-// @ts-ignore
+import {defineComponent, nextTick, ref} from "vue";
 import MailCard from "@/components/mailCard/mailCard";
 import classes from './index.module.scss'
 import BScroll from 'better-scroll'
 import {getReceiveMessage} from '../../http/Message'
 import {getFriend} from '../../http/address'
 import MessageStore from "../../store/MessageStore";
-// @ts-ignore
 import useUserInfo from '@/store/UserStore'
 import {changeArr} from "../chatPage";
 import {useRouter} from "vue-router";
@@ -16,14 +14,14 @@ export type MsgDataType = {
   data:Array<any>
 }
 
-// const s = new
+
 export default defineComponent({
   setup(props,context){
     const userInfo = useUserInfo() // 个人信息
     const Router = useRouter()
     const id = userInfo.userInfo.id
     const friend = userInfo.userFriend
-    if(!friend ||friend.length<=0){console.log(6)
+    if(!friend ||friend.length<=0){
       getFriend(id).then(res=>{
         userInfo.userFriend = res.data.data
       })
@@ -32,7 +30,6 @@ export default defineComponent({
     if( MsgStore.MsgSSE.length <= 0){
       getReceiveMessage(id).then(res=>{
         MsgStore.MsgSSE = res.data.data // 持久化
-        // cardList.value = changeArr(res.data.data)
       })
     }
     let main = ref()
@@ -55,9 +52,8 @@ export default defineComponent({
               const friend =userInfo.userFriend && userInfo.userFriend.find((el)=>{
                 return el.friend_id == item.toId
               });
-              // 二次渲染的凶手
+              // double r
 
-              // console.log(432)
               const lastMsg = data[data.length-1].msg
               data.forEach((item)=>{
                 console.log(item)
@@ -67,7 +63,6 @@ export default defineComponent({
                 MsgStore.currentMsgArr = data
                 MsgStore.currentToId = item.toId;
                 Router.push('/layout/chat')
-                // chatShow && (chatShow.value = true)
               }}>
                 <button>删除</button>
               </MailCard>
