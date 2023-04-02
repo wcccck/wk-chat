@@ -3,6 +3,11 @@ import userStore from "../../store/UserStore";
 import {MsgDataType} from '../message/message'
 import MessageStore from "@/store/MessageStore";
 
+/**
+ * 
+ * @param arr 将数组通过id分类
+ * @returns 
+ */
 export function changeArr(arr:Array<MsgInfoType>):Array<MsgDataType>{
   const id = userStore().userInfo.id
   const newArr:MsgDataType[] = []
@@ -29,15 +34,5 @@ export function changeArr(arr:Array<MsgInfoType>):Array<MsgDataType>{
       }
     })
   })
-  console.log(newArr)
   return newArr
 }
-
-// /**
-//  * 通过id设置当前chat数据
-//  * @param id
-//  */
-// export function setCurrenArrByFriendID(id:string|number){
-//   const msgStore = MessageStore()
-//   // msgStore.currentMsgArr
-// }
