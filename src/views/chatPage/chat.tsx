@@ -50,7 +50,7 @@ export default defineComponent({
     watchEffect(()=>{
       if(msgStore.currentMsgArr) {
         if (container.value) {
-          setTimeout(()=>{ // 更新完成dom未必渲染完成 所以需要延迟一下
+          setTimeout(()=>{ // 更新完成dom未必渲染完成 延迟
             container.value.scrollTop = container.value.scrollHeight
           },300)
         }
@@ -154,7 +154,7 @@ const Footer = defineComponent({
     }
     return ()=>{
       return <div class={classes.footer}>
-        <video src="" width="160" height="120"></video>
+        {/*<video src="" width="160" height="120"></video>*/}
         <Icon IconName={'yuyin'} size={'65px'} onMyClick={()=>{
           inputShowFlag.value = false
         } }></Icon>

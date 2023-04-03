@@ -1,4 +1,4 @@
-import {defineComponent, nextTick, Ref, ref, watch, onUpdated, provide, inject} from "vue";
+import {defineComponent, nextTick, Ref, ref, watch, onUpdated} from "vue";
 import Cell from "../../components/cell/Cell";
 import {getFriend} from '../../http/address'
 import userStore from "../../store/UserStore";
@@ -7,8 +7,6 @@ import classes from './address.module.scss'
 import pinyin from "pinyin/lib/pinyin-web";
 console.log(pinyin)
 import BScroll from "better-scroll";
-import {changeArr} from "../chatPage";
-import MessageStore from "../../store/MessageStore";
 import {useRoute, useRouter} from "vue-router";
 export default defineComponent({
   setup(props,context){
@@ -26,7 +24,7 @@ export default defineComponent({
       user.userFriend = res.data.data
     })
     watch(friendList,(newValue,oldValue)=>{
-      friendList.value.forEach((item)=>{
+      friendList.value && friendList.value.forEach((item)=>{
         // @ts-ignore
         const username:string = item.friend_name
         let uni =  username.charCodeAt(0)
@@ -46,8 +44,6 @@ export default defineComponent({
         }else{
           addressList.value.push({[firstChar]:[item]})
         }
-
-
       })
       addressList.value.sort((a,b)=>{// console.log(a)
         if(Object.keys(a)[0] < Object.keys(b)[0]){
@@ -61,8 +57,7 @@ export default defineComponent({
     const ctx = ref()
     const letterArr = ref<Array<string>>([])
     const scroll = ref({})
-    const startY = ref(0)
-    
+
     onUpdated(()=>{
       scroll.value = new BScroll(ctx.value,{
         click: true,
@@ -96,15 +91,7 @@ export default defineComponent({
                       ...el
                     },
                     name:"UserInfo"
-                    // path:"/layout/userInfo"
                   })
-                  // const fr_id = el.friend_id
-                  // MsgStore.currentToId = fr_id
-                  // const cardL = changeArr(MsgStore.MsgSSE).filter(item=>{
-                  //   return item.toId == fr_id
-                  // })
-                  // MsgStore.currentMsgArr = cardL.length > 0 ? cardL[0].data : []
-                  // chatShow.value = true
                 } }>
                   {{
                     left:()=>{
