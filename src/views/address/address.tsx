@@ -57,6 +57,7 @@ export default defineComponent({
     const ctx = ref()
     const letterArr = ref<Array<string>>([])
     const scroll = ref({})
+
     onUpdated(()=>{
       scroll.value = new BScroll(ctx.value,{
         click: true,
