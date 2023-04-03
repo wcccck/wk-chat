@@ -10,7 +10,7 @@
    管理工具:yarn
 
 # 目标功能
-- [x] 聊天组件功能 -- 完成
+- [x] 聊天组件 -- 完成
 - [x] 登录功能 -- 完成
 - [x] 通讯录功能 -- 待续
 - [x] 朋友圈功能 -- 待续
@@ -25,10 +25,43 @@
 
 # 项目布局
 ```
-.
+├── dist                                          // 项目打包路径
+├── src                                           // 源码目录
+│   ├── assets                                    // 静态资源
+│   │   ├── icons                                 // icons目录
+│   │   │   ├── svg                               // svg 
+│   ├── components                                // 公共组件
+│   ├── config                                    // 配置文件
+│   ├── http                                      // 请求函数
+│   ├── router                                    // 路由表
+│   ├── store                                     // pinal全局数据仓库               
+│   ├── utils                                     // 工具函数 
+│   ├── views                                     // 页面组件 
+│   │   ├── address                               // 通讯录页面
+│   │   ├── layout                                // 布局页面
+│   │   ├── message                               // 消息页面
+│   │   ├── login                                 // 登录页面
+│   │   ├── chatPage                              // 聊天页面
+│   │   ├── discover                              // 朋友圈页面
+│   │   │   ├── components                        // discover 组件 
+│   │   │   ├── Pages                             // 页面 
+│   │   │   │   ├── Editpage                      // 发送朋友圈页面
+│   │   ├── profile                               // 个人信息页面
+│   │   │   ├── Pages                             // 页面 
+│   │   │   │   ├── Editpage                      // 修改个人信息页面
+│   │   ├── userInfo                               // 用户信息页面
+│   │   │   ├── Pages                             // 页面 
+│   │   │   │   ├── Editpage                      // 修改用户信息页面
+```
 
-├── dist                                                // 项目打包路径
-├── src                                                 // 源码目录
+
+
+# 部分截图
+
+
+### 商铺列表页
+
+[//]: # (<img src="https://github.com/bailicangdu/vue2-elm/blob/master/screenshots/msite.png" width="365" height="619"/> <img src="https://github.com/bailicangdu/vue2-elm/blob/master/screenshots/msite.gif" width="365" height="619"/>)
 
 
 
